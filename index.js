@@ -14,29 +14,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 
-const ingredients = [
-  {
-    id: "1",
-    item: "Bacon",
-  },
-  {
-    id: "2",
-    item: "Eggs",
-  },
-  {
-    id: "3",
-    item: "Milk",
-  },
-  {
-    id: "4",
-    item: "Butter",
-  },
-]
-
 app.get("/ingredients", (req, res) => {
   res.json({
     success: true,
-    ingredients,
+    message: "this message is from testing moonserver",
   })
 })
 
