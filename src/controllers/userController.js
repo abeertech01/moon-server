@@ -1,3 +1,5 @@
+const { query, where } = require("firebase/firestore")
+const { Users } = require("../config/firebase")
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler")
 const ErrorHandler = require("../utils/errorHandler")
 
@@ -9,6 +11,12 @@ exports.registerUser = asyncErrorHandler((req, res, next) => {
   if (!email || !password) {
     return next(new ErrorHandler("Each field needs to be fulfilled", 409))
   }
+
+  const q = query(
+    Users,
+    where("strategy", "==", "local"),
+    where("email", "==", email)
+  )
 
   res.json({
     msg: "register controller",
