@@ -13,13 +13,11 @@ exports.registerUser = asyncErrorHandler(async (req, res, next) => {
   if (!email || !password) {
     return next(new ErrorHandler("Each field needs to be fulfilled", 409))
   }
-
   const q = query(
     Users,
     where("strategy", "==", "local"),
     where("email", "==", email)
   )
-
   const qSnapshot = await getDocs(q)
   if (qSnapshot.docs.length !== 0) {
     return next(
@@ -45,9 +43,5 @@ exports.registerUser = asyncErrorHandler(async (req, res, next) => {
       success: true,
       userId: docRef.id,
     })
-    // res.status(200).json({
-    //   success: true,
-    //   userId: docRef.id,
-    // })
   }
 })
