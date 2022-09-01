@@ -1,5 +1,11 @@
 const express = require("express")
-const { registerUser, confirmEmail } = require("../controllers/userController")
+const passport = require("passport")
+const {
+  registerUser,
+  confirmEmail,
+  confirmedEmail,
+  loginUser,
+} = require("../controllers/userController")
 const checkAuth = require("../middlewares/checkAuth")
 const validatePassword = require("../middlewares/validatePassword")
 
@@ -10,6 +16,8 @@ router.route("/register").post(validatePassword, registerUser)
 
 router.route("/confirm-email").post(checkAuth, confirmEmail)
 
-// router.route("/confirm-email/confirm-token/:token").put(confirmedEmail)
+router.route("/confirm-email/confirm-token/:token").put(confirmedEmail)
+
+router.route("/login").post(passport.authenticate("local"), loginUser)
 
 module.exports = router

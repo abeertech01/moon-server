@@ -150,4 +150,15 @@ exports.confirmedEmail = asyncErrorHandler(async (req, res, next) => {
     confirm: "confirmed",
     confirmEmailExpire: "",
   })
+
+  res.status(200).json({
+    success: true,
+  })
+})
+
+// Login user
+exports.loginUser = asyncErrorHandler(async (req, res, next) => {
+  res.status(200).json({
+    success: true,
+  })
 })
