@@ -1,15 +1,20 @@
 {
   "name": "moon-be",
   "version": "1.0.0",
-  "description": "",
+  "description": "MoonHoldings Server",
+  "author": "Leon <leon@moonholdings.xyz> (https://twitter.com/leongaban)",
+  "contributors": [
+    "Leon Gaban",
+    "Abeer Mithela",
+    "Ajoy Thomas"
+  ],
+  "license": "(MIT OR Apache-2.0)",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.1",
