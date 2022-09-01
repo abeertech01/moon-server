@@ -1,5 +1,5 @@
-// const { doc, getDoc, updateDoc } = require("firebase/firestore")
-// const { db } = require("../config/firebase")
+const { doc, getDoc, updateDoc } = require("firebase/firestore")
+const { db } = require("../config/firebase")
 // const uWaysNum = require("./uWaysNum")
 
 // function capFirstLetter(string) {
@@ -15,13 +15,13 @@ module.exports = async (email) => {
   let randAdjectiveIndex
   let randNounIndex
 
-  //   const uRef = doc(db, "usernames", "username-words")
-  //   const uSnap = await getDoc(uRef)
+  const uRef = doc(db, "usernames", "username-words")
+  const uSnap = await getDoc(uRef)
 
-  //   const adverbs = uSnap.data().adverbs
-  //   const adjectives = uSnap.data().adjectives
-  //   const nouns = uSnap.data().nouns
-  //   const usernames = uSnap.data().usernames
+  const adverbs = uSnap.data().adverbs
+  const adjectives = uSnap.data().adjectives
+  const nouns = uSnap.data().nouns
+  const usernames = uSnap.data().usernames
 
   //   const uWays = uWaysNum(adverbs, adjectives, nouns)
 
