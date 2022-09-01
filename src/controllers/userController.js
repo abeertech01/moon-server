@@ -19,11 +19,11 @@ exports.registerUser = asyncErrorHandler((req, res, next) => {
   )
 
   const qSnapshot = await getDocs(q)
-  if (qSnapshot.docs.length !== 0) {
-    return next(
-      new ErrorHandler("An account is associated with this email", 409)
-    )
-  }
+  // if (qSnapshot.docs.length !== 0) {
+  //   return next(
+  //     new ErrorHandler("An account is associated with this email", 409)
+  //   )
+  // }
 
   res.json({
     msg: "register controller",
