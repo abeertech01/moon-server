@@ -23,9 +23,9 @@ exports.registerUser = asyncErrorHandler(async (req, res, next) => {
     return next(
       new ErrorHandler("An account is associated with this email", 409)
     )
+  } else {
+    res.status(200).json({
+      success: true,
+    })
   }
-
-  res.json({
-    msg: "register controller",
-  })
 })
