@@ -1,8 +1,26 @@
+require("dotenv").config({ path: "./src/config/config.env" })
+
 const express = require("express")
+const passport = require("passport")
+const session = require("express-session")
+const cors = require("cors")
+
+// routes and middlewares
+
 const app = express()
 
-const cors = require("cors")
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 app.use(cors())
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+)
+app.use(passport.initialize())
+app.use(passport.session())
 
 const ingredients = [
   {
