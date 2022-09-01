@@ -6,6 +6,7 @@ const session = require("express-session")
 const cors = require("cors")
 
 // routes and middlewares
+const errorMiddleware = require("./src/middlewares/error")
 
 const app = express()
 
@@ -48,5 +49,8 @@ app.get("/hello", (req, res) => {
     <h1><a href="https://moonholdings.xyz">MoonHoldings.xyz</a></h1>`
   )
 })
+
+// Middleware for error handling
+app.use(errorMiddleware)
 
 app.listen(6069)
