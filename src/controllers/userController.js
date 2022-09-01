@@ -23,8 +23,6 @@ exports.registerUser = asyncErrorHandler((req, res, next) => {
     return next(
       new ErrorHandler("An account is associated with this email", 409)
     )
-  }else {
-    return
   }
 
   res.json({
