@@ -9,6 +9,8 @@ const cors = require("cors")
 const userRoutes = require("./src/routes/userRoutes")
 const errorMiddleware = require("./src/middlewares/error")
 const passportLocal = require("./src/config/strategies/passportLocal")
+const passportDiscord = require("./src/config/strategies/passportDiscord")
+const passportTwitter = require("./src/config/strategies/passportTwitter")
 
 const app = express()
 
@@ -26,6 +28,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 passportLocal(passport)
+passportDiscord(passport)
+passportTwitter(passport)
 
 app.get("/ingredients", (req, res) => {
   res.json({
