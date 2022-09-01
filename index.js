@@ -6,6 +6,7 @@ const session = require("express-session")
 const cors = require("cors")
 
 // routes and middlewares
+const userRoutes = require("./src/routes/userRoutes")
 const errorMiddleware = require("./src/middlewares/error")
 
 const app = express()
@@ -20,6 +21,8 @@ app.get("/ingredients", (req, res) => {
     message: "this message is from testing moonserver",
   })
 })
+
+app.use("/api", userRoutes)
 
 app.get("/hello", (req, res) => {
   res.setHeader("Content-Type", "text/html")
