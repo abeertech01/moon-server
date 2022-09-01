@@ -8,6 +8,7 @@ const cors = require("cors")
 // routes and middlewares
 const userRoutes = require("./src/routes/userRoutes")
 const errorMiddleware = require("./src/middlewares/error")
+const passportLocal = require("./src/config/strategies/passportLocal")
 
 const app = express()
 
@@ -21,6 +22,10 @@ app.use(
     saveUninitialized: false,
   })
 )
+app.use(passport.initialize())
+app.use(passport.session())
+
+passportLocal(passport)
 
 app.get("/ingredients", (req, res) => {
   res.json({
