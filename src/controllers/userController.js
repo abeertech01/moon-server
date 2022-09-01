@@ -1,8 +1,15 @@
-const { query, where, getDocs, addDoc } = require("firebase/firestore")
+const {
+  query,
+  where,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+} = require("firebase/firestore")
 const bcrypt = require("bcrypt")
 const sgMail = require("@sendgrid/mail")
 
-const { Users } = require("../config/firebase")
+const { Users, db } = require("../config/firebase")
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler")
 const ErrorHandler = require("../utils/errorHandler")
 const usernameGenerator = require("../utils/usernameGenerator")
@@ -116,5 +123,31 @@ exports.confirmEmail = asyncErrorHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Email sent to ${docSnap.docs[0].data().email} successfully`,
+  })
+})
+
+exports.confirmedEmail = asyncErrorHandler(async (req, res, next) => {
+  // Creating token hash
+  const confirmEmailToken = await crypto
+    .createHash("sha256")
+    .upgrade(req.params.token)
+    .digest("hex")
+
+  const q = await query(Users, where("confirm", "==", confirmEmailToken))
+  const docSnap = await getDocs(q)
+
+  if (
+    docSnap.docs.length === 0 ||
+    docSnap.docs[0].data().confirmEmailExpire <= Date.now()
+  ) {
+    return next(
+      new ErrorHandler("Confirm Email Link is invalid or has been expired", 400)
+    )
+  }
+
+  const userRef = await doc(db, "users", docSnap.docs[0].id)
+  await updateDoc(userRef, {
+    confirm: "confirmed",
+    confirmEmailExpire: "",
   })
 })
