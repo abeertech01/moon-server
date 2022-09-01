@@ -1,4 +1,4 @@
-const { query, where } = require("firebase/firestore")
+const { query, where, getDocs } = require("firebase/firestore")
 const { Users } = require("../config/firebase")
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler")
 const ErrorHandler = require("../utils/errorHandler")
