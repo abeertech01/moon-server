@@ -2,6 +2,7 @@ const { query, where, getDocs } = require("firebase/firestore")
 const { Users } = require("../config/firebase")
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler")
 const ErrorHandler = require("../utils/errorHandler")
+const usernameGenerator = require("../utils/usernameGenerator")
 
 // Register a user
 exports.registerUser = asyncErrorHandler(async (req, res, next) => {
@@ -24,8 +25,14 @@ exports.registerUser = asyncErrorHandler(async (req, res, next) => {
       new ErrorHandler("An account is associated with this email", 409)
     )
   } else {
+    const username = await usernameGenerator(email)
+
     res.status(200).json({
       success: true,
     })
+    // res.status(200).json({
+    //   success: true,
+    //   userId: docRef.id,
+    // })
   }
 })
