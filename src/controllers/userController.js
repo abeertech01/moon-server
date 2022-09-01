@@ -162,3 +162,27 @@ exports.loginUser = asyncErrorHandler(async (req, res, next) => {
     success: true,
   })
 })
+
+// Update Password
+exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
+  const oldPassword = req.body.oldPassword
+  const newPassword = req.body.newPassword
+
+  const isValid = await bcrypt.compare(oldPassword, req.user.password)
+
+  if (isValid) {
+    const newHashedPassword = await bcrypt.hash(newPassword, 10)
+    const q = await query(Users, where("email", "==", req.user.email))
+    const userSnap = await getDocs(q)
+    console.log(userSnap.docs[0].data())
+    await updateDoc(doc(db, "users", userSnap.docs[0].id), {
+      password: newHashedPassword,
+    })
+  } else {
+    return next(new ErrorHandler("Your present password is incorrect!"))
+  }
+  res.status(200).json({
+    success: true,
+    user: req.user,
+  })
+})
