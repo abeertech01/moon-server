@@ -1,4 +1,5 @@
-const { query, where, getDocs } = require("firebase/firestore")
+const { query, where, getDocs, addDoc } = require("firebase/firestore")
+const bcrypt = require("bcrypt")
 const { Users } = require("../config/firebase")
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler")
 const ErrorHandler = require("../utils/errorHandler")
@@ -26,9 +27,23 @@ exports.registerUser = asyncErrorHandler(async (req, res, next) => {
     )
   } else {
     const username = await usernameGenerator(email)
+    // ------- save user info for registering -------
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10)
+    // Add a user document
+    const docRef = await addDoc(Users, {
+      strategy: "local",
+      username,
+      email,
+      password: hashedPassword,
+      confirm: "",
+      confirmEmailExpire: null,
+      createdAt: serverTimestamp(),
+    })
 
     res.status(200).json({
       success: true,
+      userId: docRef.id,
     })
     // res.status(200).json({
     //   success: true,
