@@ -1,9 +1,12 @@
 const { query, where, getDocs, addDoc } = require("firebase/firestore")
 const bcrypt = require("bcrypt")
+const sgMail = require("@sendgrid/mail")
+
 const { Users } = require("../config/firebase")
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler")
 const ErrorHandler = require("../utils/errorHandler")
 const usernameGenerator = require("../utils/usernameGenerator")
+const sendConfirmToken = require("../utils/sendConfirmToken")
 
 // Register a user
 exports.registerUser = asyncErrorHandler(async (req, res, next) => {
@@ -56,6 +59,59 @@ exports.confirmEmail = asyncErrorHandler(async (req, res, next) => {
   }
 
   // Get Confirm Email Token
+  const confirmToken = await sendConfirmToken(docSnap.docs[0].id)
+
+  const confirmTokenUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/confirm-email/confirm-token/${confirmToken}`
+
+  sgMail.setApiKey(process.env.SENDGRID_KEY)
+
+  const mail = {
+    to: req.user.email,
+    from: {
+      email: process.env.SG_SENDER,
+      name: "MoonHoldings.xyz",
+    },
+    subject: "MoonHoldings Email Confirmation",
+    html: `
+    <h1>Hello ${req.user.username}!</h1>
+    <div style="font-size: 17px; font-weight: semi-bold; color: #494949;">
+      Please confirm your email address to complete sign up
+    </div>
+
+    <br/><br/>
+
+    <a style="
+        text-decoration: none;
+        padding: 15px 30px;
+        background-color: #13f195;
+        border-radius: 3px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #000;
+        "
+      href="${confirmTokenUrl}"
+      target="_blank"
+    >
+    Confirm your email
+    </a>
+
+    <br/><br/>
+
+    <div style="font-size: 17px; font-weight: semi-bold; color: #494949;">
+      Thanks!
+    </div>
+
+    <br/><br/>
+
+    <div style="font-size: 17px; font-weight: semi-bold; color: #494949;">
+      The Moon Holdings Team
+    </div>
+    `,
+  }
+
+  await sgMail.send(mail)
 
   res.status(200).json({
     success: true,
